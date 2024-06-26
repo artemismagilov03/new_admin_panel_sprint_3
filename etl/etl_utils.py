@@ -1,8 +1,8 @@
-from etl_logger import logger
-
 from functools import wraps
 from time import sleep
 from traceback import format_exc
+
+from etl_logger import logger
 
 
 def backoff(errors=(Exception,), steps=2):

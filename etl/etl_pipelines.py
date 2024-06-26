@@ -1,10 +1,9 @@
 from contextlib import contextmanager
 from time import sleep
 
+import config
 import psycopg
 from elasticsearch import Elasticsearch
-
-import config
 from etl_logger import logger
 from etl_utils import backoff
 
@@ -20,26 +19,18 @@ class ETL:
 
     @contextmanager
     def create_conn_es(self):
-        with Elasticsearch(
-            f'http://{config.ELASTIC_HOST}:{config.ELASTIC_PORT}/'
-        ) as es:
+        with Elasticsearch(f'http://{config.ELASTIC_HOST}:{config.ELASTIC_PORT}/') as es:
             yield es
 
-    def pipeline_film_works(
-        self, pg_conn: psycopg.Cursor, es_conn: Elasticsearch
-    ):
-        self.indexing_es(
-            'movies', 'sqls/fetch_film_works.sql', pg_conn, es_conn
-        )
+    def pipeline_film_works(self, pg_conn: psycopg.Cursor, es_conn: Elasticsearch):
+        self.indexing_es('movies', 'sqls/fetch_film_works.sql', pg_conn, es_conn)
         logger.info('Successfully indexing film works')
 
     def pipeline_genres(self, pg_conn: psycopg.Cursor, es_conn: Elasticsearch):
         self.indexing_es('genres', 'sqls/fetch_genres.sql', pg_conn, es_conn)
         logger.info('Successfully indexing genres')
 
-    def pipeline_persons(
-        self, pg_conn: psycopg.Cursor, es_conn: Elasticsearch
-    ):
+    def pipeline_persons(self, pg_conn: psycopg.Cursor, es_conn: Elasticsearch):
         self.indexing_es('persons', 'sqls/fetch_persons.sql', pg_conn, es_conn)
         logger.info('Successfully indexing persons')
 
