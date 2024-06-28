@@ -3,4 +3,4 @@ FROM (SELECT id   AS id,
              name AS name
       FROM genre
       -- WHERE fw.updated_at > NOW()
-      ORDER BY name) AS sub_query;
+      ORDER BY id) AS sub_query;
