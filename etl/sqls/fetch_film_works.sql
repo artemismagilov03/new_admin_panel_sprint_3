@@ -52,4 +52,4 @@ FROM (SELECT fw.id                                     AS id,
                LEFT JOIN genre g ON g.id = gfw.genre_id
       -- WHERE fw.updated_at > NOW()
       GROUP BY fw.id
-      ORDER BY fw.updated_at) AS sub_query;
+      ORDER BY fw.id) AS sub_query;
