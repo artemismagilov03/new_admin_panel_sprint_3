@@ -9,6 +9,9 @@ from etl_utils import backoff
 
 
 class ETL:
+    def __init__(self):
+        self.offset = 0
+    
     @contextmanager
     def create_conn_pg(self):
         with psycopg.connect(
@@ -44,7 +47,7 @@ class ETL:
         with open(sql_path) as f:
             sql = f.read()
 
-        pg_conn.execute(sql)
+        pg_conn.execute(sql, (self.offset,))
         data = pg_conn.fetchmany(config.SIZE_CHUNK)
 
         while data:
@@ -64,6 +67,8 @@ class ETL:
 
             es_conn.bulk(body=body)
             data = pg_conn.fetchmany(config.SIZE_CHUNK)
+            
+            self.offset += config.SIZE_CHUNK
 
     @backoff(steps=3)
     def run(self):
@@ -75,7 +80,7 @@ class ETL:
 
 
 if __name__ == '__main__':
-    etl = ETL()
     while True:
+        etl = ETL()
         etl.run()
         sleep(30)
