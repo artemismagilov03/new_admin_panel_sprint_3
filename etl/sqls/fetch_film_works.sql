@@ -21,7 +21,7 @@ FROM (SELECT fw.id                                     AS id,
                      json_agg(
                          DISTINCT jsonb_build_object(
                                      'id', p.id,
-                                     'name', p.full_name
+                                     'full_name', p.full_name
                                       )
                                      ) FILTER(WHERE pfw.role = 'director'),
                      '[]'
@@ -30,7 +30,7 @@ FROM (SELECT fw.id                                     AS id,
                      json_agg(
                          DISTINCT jsonb_build_object(
                                      'id', p.id,
-                                     'name', p.full_name
+                                     'full_name', p.full_name
                                       )
                                      ) FILTER(WHERE pfw.role = 'actor'),
                      '[]'
@@ -39,17 +39,17 @@ FROM (SELECT fw.id                                     AS id,
                      json_agg(
                          DISTINCT jsonb_build_object(
                                      'id', p.id,
-                                     'name', p.full_name
+                                     'full_name', p.full_name
                                       )
                                      ) FILTER(WHERE pfw.role = 'writer'),
                      '[]'
              )                                         AS writers
       FROM film_work fw
-               LEFT JOIN person_film_work pfw
-                         ON pfw.film_work_id = fw.id
-               LEFT JOIN person p ON p.id = pfw.person_id
-               LEFT JOIN genre_film_work gfw ON gfw.film_work_id = fw.id
-               LEFT JOIN genre g ON g.id = gfw.genre_id
+               LEFT JOIN person_film_work AS pfw ON pfw.film_work_id = fw.id
+               LEFT JOIN person AS p ON p.id = pfw.person_id
+               LEFT JOIN genre_film_work AS gfw ON gfw.film_work_id = fw.id
+               LEFT JOIN genre AS g ON g.id = gfw.genre_id
       -- WHERE fw.updated_at > NOW()
       GROUP BY fw.id
-      ORDER BY fw.id) AS sub_query;
+      ORDER BY fw.id
+      OFFSET %s) AS sub_query;
