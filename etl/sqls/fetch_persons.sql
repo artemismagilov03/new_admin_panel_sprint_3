@@ -15,4 +15,5 @@ FROM (SELECT p.id                    AS id,
           AS pfw ON p.id = pfw.person_id
       -- WHERE fw.updated_at > NOW()
       GROUP BY p.id
-      ORDER BY p.id) AS sub_query;
+      ORDER BY p.id
+      OFFSET %s) AS sub_query;
