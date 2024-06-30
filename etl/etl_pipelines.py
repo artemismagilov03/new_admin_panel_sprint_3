@@ -70,6 +70,9 @@ class ETL:
 
             self.offset += config.SIZE_CHUNK
 
+        self.offset = 0
+
+
     @backoff(steps=3)
     def run(self):
         with self.create_conn_pg() as pg_conn, self.create_conn_es() as es_conn:
