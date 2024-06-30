@@ -37,13 +37,7 @@ class ETL:
         self.indexing_es('persons', 'sqls/fetch_persons.sql', pg_conn, es_conn)
         logger.info('Successfully indexing persons')
 
-    def indexing_es(
-        self,
-        index: str,
-        sql_path: str,
-        pg_conn: psycopg.Cursor,
-        es_conn: Elasticsearch,
-    ):
+    def indexing_es(self, index: str, sql_path: str, pg_conn: psycopg.Cursor, es_conn: Elasticsearch):
         with open(sql_path) as f:
             sql = f.read()
 
@@ -65,13 +59,13 @@ class ETL:
                     )
                 )
 
-            es_conn.bulk(body=body)
+            result = es_conn.bulk(body=body)
+            assert result['errors'] is False, 'ElasticSearch bulk operation failed.'
             data = pg_conn.fetchmany(config.SIZE_CHUNK)
 
             self.offset += config.SIZE_CHUNK
 
         self.offset = 0
-
 
     @backoff(steps=3)
     def run(self):
