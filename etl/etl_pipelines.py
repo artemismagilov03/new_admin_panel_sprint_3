@@ -11,7 +11,7 @@ from etl_utils import backoff
 class ETL:
     def __init__(self):
         self.offset = 0
-    
+
     @contextmanager
     def create_conn_pg(self):
         with psycopg.connect(
@@ -67,7 +67,7 @@ class ETL:
 
             es_conn.bulk(body=body)
             data = pg_conn.fetchmany(config.SIZE_CHUNK)
-            
+
             self.offset += config.SIZE_CHUNK
 
     @backoff(steps=3)
