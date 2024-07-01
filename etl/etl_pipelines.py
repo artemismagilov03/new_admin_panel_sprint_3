@@ -34,7 +34,7 @@ class ETL:
         self.indexing_es('genres', 'sqls/fetch_genres.sql')
         logger.info('Successfully indexing genres')
 
-    def pipeline_persons(selfh):
+    def pipeline_persons(self):
         self.indexing_es('persons', 'sqls/fetch_persons.sql')
         logger.info('Successfully indexing persons')
 
