@@ -51,5 +51,4 @@ FROM (SELECT fw.id                                     AS id,
                LEFT JOIN genre AS g ON g.id = gfw.genre_id
       -- WHERE fw.updated_at > NOW()
       GROUP BY fw.id
-      ORDER BY fw.id
-      OFFSET %s) AS sub_query;
+      ORDER BY fw.id) AS sub_query;
