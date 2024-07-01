@@ -10,9 +10,6 @@ from etl.etl_utils import backoff
 
 
 class ETL:
-    def __init__(self):
-        self.offset = 0
-
     @contextmanager
     def create_conn_pg(self):
         with psycopg.connect(
@@ -44,7 +41,7 @@ class ETL:
             with open(sql_path) as f:
                 sql = f.read()
 
-            pg_conn.execute(sql, (self.offset,))
+            pg_conn.execute(sql)
             data = pg_conn.fetchmany(config.SIZE_CHUNK)
 
             while data:
@@ -66,10 +63,6 @@ class ETL:
                 assert result['errors'] is False, 'ElasticSearch bulk operation failed.'
                 data = pg_conn.fetchmany(config.SIZE_CHUNK)
 
-                self.offset += config.SIZE_CHUNK
-
-            self.offset = 0
-
     def run(self):
         self.pipeline_film_works()
         self.pipeline_genres()
@@ -78,7 +71,7 @@ class ETL:
 
 
 if __name__ == '__main__':
+    etl = ETL()
     while True:
-        etl = ETL()
         etl.run()
         sleep(30)
