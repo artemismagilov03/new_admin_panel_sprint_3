@@ -1,5 +1,4 @@
 from contextlib import contextmanager
-from time import sleep
 
 import psycopg
 from elasticsearch import Elasticsearch
@@ -68,10 +67,3 @@ class ETL:
         self.pipeline_genres()
         self.pipeline_persons()
         logger.info('ETL process successfully finished')
-
-
-if __name__ == '__main__':
-    etl = ETL()
-    while True:
-        etl.run()
-        sleep(120)
