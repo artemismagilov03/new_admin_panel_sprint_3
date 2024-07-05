@@ -74,4 +74,4 @@ if __name__ == '__main__':
     etl = ETL()
     while True:
         etl.run()
-        sleep(30)
+        sleep(120)
