@@ -23,15 +23,15 @@ class ETL:
             yield es
 
     def pipeline_film_works(self):
-        self.indexing_es('movies', 'sqls/fetch_film_works.sql')
+        self.indexing_es('movies', 'etl/sqls/fetch_film_works.sql')
         logger.info('Successfully indexing film works')
 
     def pipeline_genres(self):
-        self.indexing_es('genres', 'sqls/fetch_genres.sql')
+        self.indexing_es('genres', 'etl/sqls/fetch_genres.sql')
         logger.info('Successfully indexing genres')
 
     def pipeline_persons(self):
-        self.indexing_es('persons', 'sqls/fetch_persons.sql')
+        self.indexing_es('persons', 'etl/sqls/fetch_persons.sql')
         logger.info('Successfully indexing persons')
 
     @backoff(steps=3)
