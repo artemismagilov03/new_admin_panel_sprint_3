@@ -13,6 +13,6 @@ FROM (SELECT p.id                    AS id,
                            GROUP BY person_film_work.film_work_id,
                                     person_film_work.person_id)
           AS pfw ON p.id = pfw.person_id
-      -- WHERE fw.updated_at > NOW()
+      WHERE fw.updated_at > NOW()
       GROUP BY p.id
       ORDER BY p.id) AS sub_query;

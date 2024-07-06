@@ -49,6 +49,6 @@ FROM (SELECT fw.id                                     AS id,
                LEFT JOIN person AS p ON p.id = pfw.person_id
                LEFT JOIN genre_film_work AS gfw ON gfw.film_work_id = fw.id
                LEFT JOIN genre AS g ON g.id = gfw.genre_id
-      -- WHERE fw.updated_at > NOW()
+      WHERE fw.updated_at > NOW()
       GROUP BY fw.id
       ORDER BY fw.id) AS sub_query;
